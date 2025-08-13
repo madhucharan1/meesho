@@ -1,0 +1,16 @@
+import requests
+from bs4 import BeautifulSoup
+
+url = "https://www.meesho.com/women-s-footwear/pl/p7vbp"  # example category page
+headers = {
+    "User-Agent": "Mozilla/5.0"
+}
+
+response = requests.get(url, headers=headers)
+soup = BeautifulSoup(response.text, 'html.parser')
+
+products = soup.find_all('div', {'class': 'Card_product__...'})  # class name might vary
+for product in products:
+    title = product.find('h5').text if product.find('h5') else "No title"
+    price = product.find('span', {'class': 'price'}).text if product.find('span', {'class': 'price'}) else "No price"
+    print(f"Product: {title}, Price: {price}")
